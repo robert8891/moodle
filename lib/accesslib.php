@@ -3945,7 +3945,7 @@ function get_role_users($roleid, context $context, $parent = false, $fields = ''
         $ejoin = "";
     }
 
-    $sql = "SELECT DISTINCT $fields, ra.roleid
+    $sql = "SELECT DISTINCT $fields, ra.roleid, ra.timemodified	//add timemodified in select field
               FROM {role_assignments} ra
               JOIN {user} u ON u.id = ra.userid
               JOIN {role} r ON ra.roleid = r.id
@@ -3956,7 +3956,7 @@ function get_role_users($roleid, context $context, $parent = false, $fields = ''
                    $roleselect
                    $groupselect
                    $extrawheretest
-          ORDER BY $sort";                  // join now so that we can just use fullname() later
+          ORDER BY ra.timemodified DESC";	//sort by timemodified; Delete "DESC" to reversed order (first assigned to first row)               
 
     return $DB->get_records_sql($sql, $params, $limitfrom, $limitnum);
 }
